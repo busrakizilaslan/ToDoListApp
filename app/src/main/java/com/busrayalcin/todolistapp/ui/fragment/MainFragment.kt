@@ -33,14 +33,13 @@ class MainFragment : Fragment(),SearchView.OnQueryTextListener {
     ): View? {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_main,container,false)
         binding.mainFragment = this
-        binding.mainToolBarTitle = "ToDo"
+        binding.mainToolBarTitle = "ToDos"
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
         viewModel.taskList.observe(viewLifecycleOwner){
             val adapter = TaskAdapter(requireContext(),it,viewModel)
             binding.taskAdapter = adapter
         }
-
         return binding.root
     }
 

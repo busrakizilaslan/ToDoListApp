@@ -19,12 +19,13 @@ import com.busrayalcin.todolistapp.utils.doNavigate
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import kotlin.math.min
 
+val alarmTime: Calendar = Calendar.getInstance()
 @AndroidEntryPoint
 class UpdateTaskFragment : Fragment() {
     private lateinit var binding : FragmentUpdateTaskBinding
     private lateinit var viewModel : UpdateTaskFragmentViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val tempViewModel : UpdateTaskFragmentViewModel by viewModels()
@@ -79,7 +80,11 @@ class UpdateTaskFragment : Fragment() {
             val dp = DatePickerDialog(requireContext(),
                 DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                     binding.setDate.setText("$dayOfMonth/${month+1}/$year")
+                    alarmTime.set(Calendar.DAY_OF_MONTH,dayOfMonth)
+                    alarmTime.set(Calendar.MONTH,month)
+                    alarmTime.set(Calendar.YEAR,year)
                 },year,month,day)
+
 
             dp.setButton(DialogInterface.BUTTON_POSITIVE,"Set",dp)
             dp.setButton(DialogInterface.BUTTON_NEGATIVE,"Cancel",dp)
@@ -95,12 +100,18 @@ class UpdateTaskFragment : Fragment() {
 
             val tp = TimePickerDialog(requireContext(), TimePickerDialog.OnTimeSetListener { t, hourOfDay, minute ->
                 binding.setTime.setText(String.format("%02d:%02d", hourOfDay,minute))
+                alarmTime.set(Calendar.HOUR_OF_DAY,hourOfDay)
+                alarmTime.set(Calendar.MINUTE, minute)
+                alarmTime.set(Calendar.SECOND, 0)
             },hour,minute,true)
 
             tp.setButton(DialogInterface.BUTTON_POSITIVE,"Set",tp)
             tp.setButton(DialogInterface.BUTTON_NEGATIVE,"Cancel",tp)
             tp.show()
         }
+        println("UpdateTaskFragment")
+        println(alarmTime)
+        println(alarmTime.timeInMillis)
     }
 
 }
